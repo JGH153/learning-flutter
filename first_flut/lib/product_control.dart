@@ -12,7 +12,7 @@ ProductControl(this.addProduct);
       return RaisedButton(
           color: Theme.of(context).primaryColor,
           onPressed: () {
-            addProduct('New product');
+            addProduct({'title': 'Donuts', 'image': 'assets/food.jpg'});
           },
           child: Text('Add product'),
         );

@@ -60,6 +60,12 @@ class _MyAppState extends State<MyApp> {
         }
         return null;
       },
+      onUnknownRoute: (RouteSettings settings) {
+        return MaterialPageRoute(
+          builder: (context) =>
+              ProductsPage(_products, _addProduct, _deleteProduct),
+        );
+      },
     );
   }
 }

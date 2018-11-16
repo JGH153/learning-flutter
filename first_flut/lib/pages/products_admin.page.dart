@@ -22,9 +22,10 @@ class ProductsAdmin extends StatelessWidget {
                 title: Text('Select'),
               ),
               ListTile(
+                leading: Icon(Icons.shop),
                 title: Text('Product list'),
                 onTap: () {
-                  Navigator.pushReplacementNamed(context, '/');
+                  Navigator.pushReplacementNamed(context, '/products');
                 },
               )
             ],

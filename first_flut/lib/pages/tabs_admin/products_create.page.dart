@@ -12,9 +12,53 @@ class ProductCreatePage extends StatefulWidget {
 }
 
 class _ProductCreatePage extends State<ProductCreatePage> {
-  String titleValue;
-  String descriptionValue;
-  double priceValue;
+  String _titleValue;
+  String _descriptionValue;
+  double _priceValue;
+
+  Widget _buildTitleTextFiled() {
+    return TextField(
+      decoration: InputDecoration(labelText: 'Product title:'),
+      onChanged: (String value) {
+        setState(() {
+          _titleValue = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildDescriptionTextField() {
+    return TextField(
+      maxLines: 7,
+      onChanged: (String value) {
+        setState(() {
+          _descriptionValue = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildPriceTextFiled() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      onChanged: (String value) {
+        setState(() {
+          _priceValue = double.parse(value);
+        });
+      },
+    );
+  }
+
+  void _submitForm() {
+    final Map<String, dynamic> product = {
+      'title': _titleValue,
+      'description': _descriptionValue,
+      'price': _priceValue,
+      'image': 'assets/food.jpg'
+    };
+    widget.addProduct(product);
+    Navigator.pushReplacementNamed(context, '/products');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,41 +66,17 @@ class _ProductCreatePage extends State<ProductCreatePage> {
       margin: EdgeInsets.all(10.0),
       child: ListView(
         children: <Widget>[
-          TextField(
-            decoration: InputDecoration(labelText: 'Product title:'),
-            onChanged: (String value) {
-              setState(() {
-                titleValue = value;
-              });
-            },
-          ),
-          TextField(
-            maxLines: 7,
-            onChanged: (String value) {
-              setState(() {
-                descriptionValue = value;
-              });
-            },
-          ),
-          TextField(
-            keyboardType: TextInputType.number,
-            onChanged: (String value) {
-              setState(() {
-                priceValue = double.parse(value);
-              });
-            },
+          _buildTitleTextFiled(),
+          _buildDescriptionTextField(),
+          _buildPriceTextFiled(),
+          SizedBox(
+            height: 10.0,
           ),
           RaisedButton(
             child: Text('Save'),
-            onPressed: () {
-              final Map<String, dynamic> product = {
-                'title': titleValue,
-                'description': descriptionValue,
-                'price': priceValue,
-                'image': 'assets/food.jpg'
-              };
-              widget.addProduct(product);
-            },
+            color: Theme.of(context).accentColor,
+            textColor: Colors.white,
+            onPressed: _submitForm,
           ),
         ],
       ),

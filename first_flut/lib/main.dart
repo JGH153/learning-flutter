@@ -39,9 +39,9 @@ class _MyAppState extends State<MyApp> {
           brightness: Brightness.light,
           primarySwatch: Colors.deepOrange,
           accentColor: Colors.deepPurple),
-      // home: AuthPage(),
+      home: AuthPage(),
       routes: {
-        '/': (context) => ProductsPage(_products),
+        '/products': (context) => ProductsPage(_products),
         '/admin': (context) => ProductsAdmin(_addProduct, _deleteProduct)
       },
       onGenerateRoute: (RouteSettings settings) {
@@ -55,6 +55,9 @@ class _MyAppState extends State<MyApp> {
             builder: (BuildContext context) => ProductPage(
                   _products[index]['title'],
                   _products[index]['image'],
+                  _products[index]['description'],
+                  _products[index]['price'],
+                  'Skøyen, Norge, Jorden, Melkeveien'
                 ),
           );
         }
@@ -62,8 +65,7 @@ class _MyAppState extends State<MyApp> {
       },
       onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
-          builder: (context) =>
-              ProductsPage(_products),
+          builder: (context) => ProductsPage(_products),
         );
       },
     );

@@ -2,36 +2,54 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import './../widgets/ui_elements/title_default.dart';
+
 class ProductPage extends StatelessWidget {
   final String title;
+  final String description;
+  final String address;
+  final double price;
   final String imageUrl;
 
-  ProductPage(this.title, this.imageUrl);
+  ProductPage(
+      this.title, this.imageUrl, this.description, this.price, this.address);
 
-  _showDeleteDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Are you sure?'),
-            content: Text('This can not be undone'),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('Continue'),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+  _showProduct(context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Image.asset(imageUrl),
+        Container(
+          padding: EdgeInsets.all(10.0),
+          child: TitleDefault(title),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Text(
+              'address',
+              style: TextStyle(fontFamily: 'Oswald', color: Colors.grey),
+            ),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              child: Text(
+                '|',
+                style: TextStyle(color: Colors.grey),
               ),
-              FlatButton(
-                child: Text('Delete'),
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context, true);
-                },
-              ),
-            ],
-          );
-        });
+            ),
+            Text('\$' + price.toString(),
+                style: TextStyle(fontFamily: 'Oswald', color: Colors.grey)),
+          ],
+        ),
+        Container(
+          padding: EdgeInsets.all(10.0),
+          child: Text(
+            description,
+            textAlign: TextAlign.center,
+          ),
+        )
+      ],
+    );
   }
 
   @override
@@ -45,24 +63,7 @@ class ProductPage extends StatelessWidget {
         appBar: AppBar(
           title: Text(title),
         ),
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            Image.asset(imageUrl),
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: Text(title),
-            ),
-            Container(
-              padding: EdgeInsets.all(10.0),
-              child: RaisedButton(
-                color: Theme.of(context).accentColor,
-                child: Text('Delete'),
-                onPressed: () => _showDeleteDialog(context),
-              ),
-            ),
-          ],
-        ),
+        body: _showProduct(context),
       ),
     );
   }

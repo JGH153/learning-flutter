@@ -12,70 +12,94 @@ class _AuthPage extends State<AuthPage> {
   String _password;
   bool _acceptTerms = false;
 
+  DecorationImage _buildBackgroundImage() {
+    return DecorationImage(
+      fit: BoxFit.cover,
+      colorFilter:
+          ColorFilter.mode(Colors.black.withOpacity(0.3), BlendMode.dstATop),
+      image: AssetImage('assets/background.jpg'),
+    );
+  }
+
+  Widget _buildEmailTextFiled() {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: 'E-mail',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      keyboardType: TextInputType.emailAddress,
+      onChanged: (String value) {
+        setState(() {
+          _email = value;
+        });
+      },
+    );
+  }
+
+  Widget _buildPasswordTextField() {
+    return TextField(
+      decoration: InputDecoration(
+        labelText: 'Password',
+        filled: true,
+        fillColor: Colors.white,
+      ),
+      onChanged: (String value) {
+        setState(() {
+          _password = value;
+        });
+      },
+      obscureText: true,
+    );
+  }
+
+  Widget _buildAcceptSwitch() {
+    return SwitchListTile(
+      value: _acceptTerms,
+      onChanged: (bool value) {
+        setState(() {
+          _acceptTerms = value;
+        });
+      },
+      title: Text('Accept Terms'),
+    );
+  }
+
+  void _submitForm() {
+    Navigator.pushReplacementNamed(context, '/products');
+  }
+
   _getWidgetBody(context) {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+    final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
+
     return Container(
       decoration: BoxDecoration(
-        image: DecorationImage(
-          fit: BoxFit.cover,
-          colorFilter: ColorFilter.mode(
-              Colors.black.withOpacity(0.3), BlendMode.dstATop),
-          image: AssetImage('assets/background.jpg'),
-        ),
+        image: _buildBackgroundImage(),
       ),
       padding: EdgeInsets.all(10.0),
       child: Center(
         child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'E-mail',
-                  filled: true,
-                  fillColor: Colors.white,
+          child: Container(
+            width: targetWidth,
+            child: Column(
+              children: <Widget>[
+                _buildEmailTextFiled(),
+                SizedBox(
+                  height: 10.0,
                 ),
-                keyboardType: TextInputType.emailAddress,
-                onChanged: (String value) {
-                  setState(() {
-                    _email = value;
-                  });
-                },
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  filled: true,
-                  fillColor: Colors.white,
+                _buildPasswordTextField(),
+                SizedBox(
+                  height: 10.0,
                 ),
-                onChanged: (String value) {
-                  setState(() {
-                    _password = value;
-                  });
-                },
-                obscureText: true,
-              ),
-              SwitchListTile(
-                value: _acceptTerms,
-                onChanged: (bool value) {
-                  setState(() {
-                    _acceptTerms = value;
-                  });
-                },
-                title: Text('Accept Terms'),
-              ),
-              SizedBox(
-                height: 10.0,
-              ),
-              RaisedButton(
-                color: Theme.of(context).primaryColor,
-                child: Text('Login'),
-                onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/products');
-                },
-              ),
-            ],
+                _buildAcceptSwitch(),
+                RaisedButton(
+                  textColor: Colors.white,
+                  child: Text('Login'),
+                  onPressed: _submitForm,
+                ),
+              ],
+            ),
           ),
         ),
       ),

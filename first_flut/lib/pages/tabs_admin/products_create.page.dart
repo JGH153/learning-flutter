@@ -20,6 +20,11 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   Widget _buildTitleTextFiled() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Product title:'),
+      validator: (String value) {
+        if (value.isEmpty || value.length < 5) {
+          return 'Title is required and shold be 5+ chars long';
+        }
+      },
       onSaved: (String value) {
         setState(() {
           _titleValue = value;
@@ -31,6 +36,11 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   Widget _buildDescriptionTextField() {
     return TextFormField(
       maxLines: 4,
+      validator: (String value) {
+        if (value.isEmpty || value.length < 10) {
+          return 'Description is required and shold be 10+ chars long';
+        }
+      },
       onSaved: (String value) {
         setState(() {
           _descriptionValue = value;
@@ -42,6 +52,12 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   Widget _buildPriceTextFiled() {
     return TextFormField(
       keyboardType: TextInputType.number,
+      validator: (String value) {
+        if (value.isEmpty ||
+            !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
+          return 'Price is required and shold be a number';
+        }
+      },
       onSaved: (String value) {
         setState(() {
           _priceValue = double.parse(value);
@@ -51,6 +67,9 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   }
 
   void _submitForm() {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
     _formKey.currentState.save();
     final Map<String, dynamic> product = {
       'title': _titleValue,
@@ -67,33 +86,38 @@ class _ProductCreatePage extends State<ProductCreatePage> {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
-    return Container(
-      width: targetWidth,
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: targetPadding / 2),
-          children: <Widget>[
-            _buildTitleTextFiled(),
-            _buildDescriptionTextField(),
-            _buildPriceTextFiled(),
-            SizedBox(
-              height: 10.0,
-            ),
-            RaisedButton(
-              child: Text('Save'),
-              textColor: Colors.white,
-              onPressed: _submitForm,
-            ),
-            // GestureDetector(
-            //   onTap: _submitForm,
-            //   child: Container(
-            //     color: Colors.green,
-            //     padding: EdgeInsets.all(5.0),
-            //     child: Text('My Button'),
-            //   ),
-            // )
-          ],
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Container(
+        width: targetWidth,
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            padding: EdgeInsets.symmetric(horizontal: targetPadding / 2),
+            children: <Widget>[
+              _buildTitleTextFiled(),
+              _buildDescriptionTextField(),
+              _buildPriceTextFiled(),
+              SizedBox(
+                height: 10.0,
+              ),
+              RaisedButton(
+                child: Text('Save'),
+                textColor: Colors.white,
+                onPressed: _submitForm,
+              ),
+              // GestureDetector(
+              //   onTap: _submitForm,
+              //   child: Container(
+              //     color: Colors.green,
+              //     padding: EdgeInsets.all(5.0),
+              //     child: Text('My Button'),
+              //   ),
+              // )
+            ],
+          ),
         ),
       ),
     );

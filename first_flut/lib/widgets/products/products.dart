@@ -16,7 +16,7 @@ class Products extends StatelessWidget {
       );
     } else {
       productCards = Center(
-        child: Text('No Prods found, add above'),
+        child: Text('No Prods found, add in sidebar'),
       );
     }
     return productCards;

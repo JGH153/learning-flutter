@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
-class ProductCreatePage extends StatefulWidget {
+class ProductEditPage extends StatefulWidget {
   final Function addProduct;
+  final Function updateProduct;
+  final Map<String, dynamic> product;
+  final int productIndex;
 
-  ProductCreatePage(this.addProduct);
+  ProductEditPage({this.addProduct, this.updateProduct, this.product, this.productIndex}) {
+    print(product);
+  }
 
   @override
   State<StatefulWidget> createState() {
-    return _ProductCreatePage();
+    return _ProductEditPage();
   }
 }
 
-class _ProductCreatePage extends State<ProductCreatePage> {
+class _ProductEditPage extends State<ProductEditPage> {
   final Map<String, dynamic> _formData = {
     'title': null,
     'description': null,
@@ -23,13 +28,15 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   Widget _buildTitleTextFiled() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Product title:'),
+      initialValue:
+          widget.product == null ? '' : widget.product['title'],
       validator: (String value) {
-        if (value.isEmpty || value.length < 5) {
-          return 'Title is required and shold be 5+ chars long';
+        if (value.isEmpty || value.length < 2) {
+          return 'Title is required and shold be 2+ chars long';
         }
       },
       onSaved: (String value) {
-          _formData['title'] = value;
+        _formData['title'] = value;
       },
     );
   }
@@ -37,13 +44,15 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   Widget _buildDescriptionTextField() {
     return TextFormField(
       maxLines: 4,
+      initialValue:
+          widget.product == null ? '' : widget.product['description'],
       validator: (String value) {
-        if (value.isEmpty || value.length < 10) {
-          return 'Description is required and shold be 10+ chars long';
+        if (value.isEmpty || value.length < 3) {
+          return 'Description is required and shold be 3+ chars long';
         }
       },
       onSaved: (String value) {
-          _formData['description'] = value;
+        _formData['description'] = value;
       },
     );
   }
@@ -51,6 +60,8 @@ class _ProductCreatePage extends State<ProductCreatePage> {
   Widget _buildPriceTextFiled() {
     return TextFormField(
       keyboardType: TextInputType.number,
+      initialValue:
+          widget.product == null ? '' : widget.product['price'].toString(),
       validator: (String value) {
         if (value.isEmpty ||
             !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
@@ -58,7 +69,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
         }
       },
       onSaved: (String value) {
-          _formData['value'] = double.parse(value);
+        _formData['price'] = double.parse(value);
       },
     );
   }
@@ -68,7 +79,11 @@ class _ProductCreatePage extends State<ProductCreatePage> {
       return;
     }
     _formKey.currentState.save();
-    widget.addProduct(_formData);
+    if (widget.product == null) {
+      widget.addProduct(_formData);
+    } else {
+      widget.updateProduct(widget.productIndex, _formData);
+    }
     Navigator.pushReplacementNamed(context, '/products');
   }
 
@@ -77,7 +92,7 @@ class _ProductCreatePage extends State<ProductCreatePage> {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
-    return GestureDetector(
+    final Widget pageContent = GestureDetector(
       onTap: () {
         FocusScope.of(context).requestFocus(FocusNode());
       },
@@ -112,5 +127,13 @@ class _ProductCreatePage extends State<ProductCreatePage> {
         ),
       ),
     );
+    return widget.product == null
+        ? pageContent
+        : Scaffold(
+            appBar: AppBar(
+              title: Text('Edit Product'),
+            ),
+            body: pageContent,
+          );
   }
 }

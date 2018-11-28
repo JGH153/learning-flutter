@@ -6,7 +6,8 @@ class ProductEditPage extends StatefulWidget {
   final Map<String, dynamic> product;
   final int productIndex;
 
-  ProductEditPage({this.addProduct, this.updateProduct, this.product, this.productIndex}) {
+  ProductEditPage(
+      {this.addProduct, this.updateProduct, this.product, this.productIndex}) {
     print(product);
   }
 
@@ -28,8 +29,7 @@ class _ProductEditPage extends State<ProductEditPage> {
   Widget _buildTitleTextFiled() {
     return TextFormField(
       decoration: InputDecoration(labelText: 'Product title:'),
-      initialValue:
-          widget.product == null ? '' : widget.product['title'],
+      initialValue: widget.product == null ? '' : widget.product['title'],
       validator: (String value) {
         if (value.isEmpty || value.length < 2) {
           return 'Title is required and shold be 2+ chars long';
@@ -44,8 +44,7 @@ class _ProductEditPage extends State<ProductEditPage> {
   Widget _buildDescriptionTextField() {
     return TextFormField(
       maxLines: 4,
-      initialValue:
-          widget.product == null ? '' : widget.product['description'],
+      initialValue: widget.product == null ? '' : widget.product['description'],
       validator: (String value) {
         if (value.isEmpty || value.length < 3) {
           return 'Description is required and shold be 3+ chars long';
@@ -74,7 +73,7 @@ class _ProductEditPage extends State<ProductEditPage> {
     );
   }
 
-  Widget _BuildPageContent(BuildContext context){
+  Widget _BuildPageContent(BuildContext context) {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;

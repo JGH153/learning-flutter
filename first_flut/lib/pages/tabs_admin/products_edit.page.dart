@@ -130,13 +130,14 @@ class _ProductEditPage extends State<ProductEditPage> {
       ));
     } else {
       widget.updateProduct(
-          widget.productIndex,
-          Product(
-            title: _formData['title'],
-            description: _formData['description'],
-            price: _formData['price'],
-            image: _formData['image'],
-          ));
+        widget.productIndex,
+        Product(
+          title: _formData['title'],
+          description: _formData['description'],
+          price: _formData['price'],
+          image: _formData['image'],
+        ),
+      );
     }
     Navigator.pushReplacementNamed(context, '/products');
   }
